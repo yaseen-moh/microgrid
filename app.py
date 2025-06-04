@@ -15,7 +15,7 @@ battery_efficiency = st.sidebar.slider("Battery Efficiency (%)", 70, 100, 90) / 
 
 # --- Generate profiles ---
 hours = np.arange(24)
-solar_profile = np.array([0]*6 + [2, 3, 4, 5, 5, 5, 4, 3, 2] + [0]*5)
+solar_profile = np.array([0]*6 + [2, 3, 4, 5, 5, 5, 4, 3, 2] + [0]*9)
 load_profile = np.array([2]*6 + [3]*4 + [4]*6 + [3]*4 + [2]*4)
 
 battery_level = 0
