@@ -1,74 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Microgrid Simulator | By Yaseen Mohamed</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-      color: #333;
-      text-align: center;
-    }
-    header {
-      background-color: #2b4162;
-      color: white;
-      padding: 40px 20px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    p {
-      font-size: 1.2rem;
-      max-width: 700px;
-      margin: 20px auto;
-    }
-    .btn {
-      background-color: #00c853;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 20px;
-    }
-    section {
-      padding: 60px 20px;
-    }
-    footer {
-      background-color: #e0e0e0;
-      padding: 20px;
-      font-size: 0.9rem;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoltSphere | Home</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <header>
-    <h1>🔋 Microgrid Simulator</h1>
-    <p>Explore solar power, batteries, and smart home energy — all in one easy-to-use simulation built by Yaseen Mohamed.</p>
-    <a href="https://microgrid-naqt6cg4k34kvnrkwwplwz.streamlit.app/" class="btn" target="_blank">Launch the Simulator</a>
+    <nav>
+      <h1 class="logo">VoltSphere</h1>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <section class="hero">
+      <h2>Pioneering the Future of Energy</h2>
+      <p>At the forefront of smart energy innovation, we are building the tools that empower communities to take control of their energy future.</p>
+      <a href="about.html" class="btn">Learn More</a>
+    </section>
   </header>
 
-  <section>
-    <h2>🌞 How It Works</h2>
-    <p>This simulator models 24 hours of solar generation, home electricity usage, and battery behavior. Choose your battery size, see how much energy you pull from the grid, and more!</p>
-  </section>
-
-  <section>
-    <h2>🚀 Who It's For</h2>
-    <p>Perfect for students, homeowners, educators, and energy engineers who want to learn how microgrids work — fast.</p>
+  <section class="features">
+    <div class="feature-card">
+      <h3><a href="services.html#web-app">Microgrid Simulation Platform</a></h3>
+      <p>A free-to-try, interactive web app that lets users simulate solar, battery, and grid energy systems in real time. Perfect for students, homeowners, and educators.</p>
+    </div>
+    <div class="feature-card">
+      <h3><a href="services.html#api">MicrogridSim Pro API</a></h3>
+      <p>A powerful backend service that enables companies to run custom microgrid simulations at scale, with exportable data and deep analytics.</p>
+    </div>
   </section>
 
   <footer>
-    Built by Yaseen Mohamed · © 2025 · MIT License
+    <form>
+      <label>Email Address</label>
+      <input type="email" placeholder="Enter your email" />
+      <button>Sign Up</button>
+    </form>
+    <p>&copy; 2025 VoltSphere</p>
   </footer>
-
 </body>
 </html>
