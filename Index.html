@@ -450,6 +450,131 @@
         </div>
     </section>
 
+    <!-- Free Demo Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Try Our Free Demo</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">Experience the power of microgrid simulation with our interactive demo. Adjust settings and see how solar, battery, and grid systems work together over a 24-hour period.</p>
+            </div>
+            
+            <!-- Demo Container -->
+            <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 2rem; max-width: 900px; margin: 0 auto;">
+                
+                <!-- Control Panel -->
+                <div style="background: #f8f9ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem; color: #333;">⚙️ Simulation Settings</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Battery Capacity (kWh): <span id="batteryValue">10</span></label>
+                            <input type="range" id="batteryCapacity" min="0" max="20" value="10" style="width: 100%;" oninput="updateSimulation()">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Battery Efficiency (%): <span id="efficiencyValue">90</span></label>
+                            <input type="range" id="batteryEfficiency" min="70" max="100" value="90" style="width: 100%;" oninput="updateSimulation()">
+                        </div>
+                        
+                        <div>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+                                <input type="checkbox" id="solarEnabled" checked onchange="updateSimulation()">
+                                ☀️ Enable Solar Power
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button onclick="updateSimulation()" class="btn" style="margin-top: 1rem; display: inline-block;">Run Simulation</button>
+                </div>
+
+                <!-- Chart Container -->
+                <div style="position: relative;">
+                    <canvas id="microgridChart" width="800" height="400" style="max-width: 100%; height: auto;"></canvas>
+                </div>
+                
+                <!-- Results -->
+                <div id="simulationResults" style="margin-top: 1.5rem; padding: 1rem; background: #e8f5e8; border-radius: 8px;">
+                    <p style="margin: 0; color: #2d5016; font-weight: 500;">✅ Simulation complete! Adjust the settings above to see how different configurations affect your microgrid performance.</p>
+                </div>
+                
+                <!-- Code Display -->
+                <div style="margin-top: 2rem;">
+                    <details style="cursor: pointer;">
+                        <summary style="font-weight: 500; color: #667eea; padding: 0.5rem; background: #f0f2ff; border-radius: 5px;">
+                            📝 View Python Code (Streamlit Version)
+                        </summary>
+                        <pre style="background: #f8f8f8; padding: 1rem; border-radius: 5px; overflow-x: auto; margin-top: 1rem; font-size: 0.9rem;"><code>import streamlit as st
+import matplotlib.pyplot as plt
+import numpy as np
+
+st.set_page_config(page_title="Microgrid Simulator", layout="centered")
+st.title("🔋 Microgrid Simulation Tool")
+st.write("Simulates a 24-hour microgrid with solar generation, battery storage, and home energy usage.")
+
+# --- Sidebar options ---
+st.sidebar.header("⚙️ Simulation Settings")
+battery_capacity = st.sidebar.slider("Battery Capacity (kWh)", 0, 20, 10)
+battery_efficiency = st.sidebar.slider("Battery Efficiency (%)", 70, 100, 90) / 100
+use_solar = st.sidebar.checkbox("☀️ Enable Solar Power", value=True)
+
+# --- Generate profiles ---
+hours = np.arange(24)
+if use_solar:
+    solar_profile = np.array([0]*6 + [2, 3, 4, 5, 5, 5, 4, 3, 2] + [0]*5)
+else:
+    solar_profile = np.zeros(24)
+
+load_profile = np.array([2]*6 + [3]*4 + [4]*6 + [3]*4 + [2]*4)
+battery_level = 0
+battery_storage = []
+grid_usage = []
+
+# --- Simulation logic ---
+for hour in range(24):
+    solar = solar_profile[hour]
+    load = load_profile[hour]
+    net_energy = solar - load
+    
+    if net_energy >= 0:
+        # Surplus: charge battery
+        charge_amount = net_energy * battery_efficiency
+        battery_level = min(battery_level + charge_amount, battery_capacity)
+        grid = 0
+    else:
+        # Deficit: use battery first
+        required = -net_energy
+        if battery_level >= required:
+            battery_level -= required / battery_efficiency
+            grid = 0
+        else:
+            grid = required - battery_level
+            battery_level = 0
+    
+    battery_storage.append(battery_level)
+    grid_usage.append(grid)
+
+# --- Plotting ---
+fig, ax = plt.subplots(figsize=(10, 5))
+if use_solar:
+    ax.plot(hours, solar_profile, label="☀️ Solar Generation (kW)", color="gold")
+ax.plot(hours, load_profile, label="🏠 Load Demand (kW)", color="blue")
+ax.plot(hours, battery_storage, label="🔋 Battery Level (kWh)", color="green")
+ax.plot(hours, grid_usage, label="⚡ Grid Usage (kW)", color="red")
+
+ax.set_xlabel("Hour of Day")
+ax.set_ylabel("Energy / Power")
+ax.set_title("Microgrid Simulation Over 24 Hours")
+ax.legend()
+ax.grid(True)
+
+st.pyplot(fig)
+st.success("✅ Simulation complete!")</code></pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Newsletter Section -->
     <section class="newsletter">
         <div class="container">
@@ -469,7 +594,147 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
+        let microgridChart = null;
+
+        // Initialize chart when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateSimulation, 500);
+        });
+
+        function updateSimulation() {
+            // Get input values
+            const batteryCapacity = parseFloat(document.getElementById('batteryCapacity').value);
+            const batteryEfficiency = parseFloat(document.getElementById('batteryEfficiency').value) / 100;
+            const solarEnabled = document.getElementById('solarEnabled').checked;
+
+            // Update display values
+            document.getElementById('batteryValue').textContent = batteryCapacity;
+            document.getElementById('efficiencyValue').textContent = document.getElementById('batteryEfficiency').value;
+
+            // Generate profiles
+            const hours = Array.from({length: 24}, (_, i) => i);
+            const solarProfile = solarEnabled ? 
+                [0,0,0,0,0,0,2,3,4,5,5,5,4,3,2,0,0,0,0,0,0,0,0,0] : 
+                new Array(24).fill(0);
+            const loadProfile = [2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,3,3,3,3,2,2,2,2];
+
+            // Simulation logic
+            let batteryLevel = 0;
+            const batteryStorage = [];
+            const gridUsage = [];
+
+            for (let hour = 0; hour < 24; hour++) {
+                const solar = solarProfile[hour];
+                const load = loadProfile[hour];
+                const netEnergy = solar - load;
+
+                if (netEnergy >= 0) {
+                    // Surplus: charge battery
+                    const chargeAmount = netEnergy * batteryEfficiency;
+                    batteryLevel = Math.min(batteryLevel + chargeAmount, batteryCapacity);
+                    gridUsage.push(0);
+                } else {
+                    // Deficit: use battery first
+                    const required = -netEnergy;
+                    if (batteryLevel >= required) {
+                        batteryLevel -= required / batteryEfficiency;
+                        gridUsage.push(0);
+                    } else {
+                        gridUsage.push(required - batteryLevel);
+                        batteryLevel = 0;
+                    }
+                }
+                batteryStorage.push(batteryLevel);
+            }
+
+            // Update chart
+            updateChart(hours, solarProfile, loadProfile, batteryStorage, gridUsage, solarEnabled);
+        }
+
+        function updateChart(hours, solar, load, battery, grid, showSolar) {
+            const ctx = document.getElementById('microgridChart').getContext('2d');
+            
+            if (microgridChart) {
+                microgridChart.destroy();
+            }
+
+            const datasets = [
+                {
+                    label: '🏠 Load Demand (kW)',
+                    data: load,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: '🔋 Battery Level (kWh)',
+                    data: battery,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: '⚡ Grid Usage (kW)',
+                    data: grid,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    fill: false,
+                    tension: 0.1
+                }
+            ];
+
+            if (showSolar) {
+                datasets.unshift({
+                    label: '☀️ Solar Generation (kW)',
+                    data: solar,
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    fill: false,
+                    tension: 0.1
+                });
+            }
+
+            microgridChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Microgrid Simulation Over 24 Hours'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Hour of Day'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Energy / Power'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
         // Smooth page transitions
         function navigateToServices() {
             document.body.style.opacity = '0';
