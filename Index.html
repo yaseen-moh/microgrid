@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VoltSphere</title>
   <style>
-    /* Reset & Base */
     * {
       margin: 0;
       padding: 0;
@@ -17,7 +16,6 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: #0f172a;
       color: #f1f5f9;
-      line-height: 1.6;
     }
 
     a {
@@ -25,18 +23,15 @@
       text-decoration: none;
     }
 
-    header {
-      background-color: #1e293b;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 2rem;
+      background-color: #1e293b;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
     nav .logo {
@@ -60,23 +55,22 @@
     }
 
     h1, h2 {
-      margin-bottom: 1rem;
       color: #38bdf8;
+      margin-bottom: 1rem;
     }
 
-    .service-button {
+    .button {
       background-color: #38bdf8;
       color: #0f172a;
-      border: none;
       padding: 0.75rem 1.5rem;
-      margin-top: 1rem;
-      cursor: pointer;
+      border: none;
       border-radius: 0.5rem;
       font-weight: bold;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    .service-button:hover {
+    .button:hover {
       background-color: #0ea5e9;
     }
 
@@ -87,15 +81,14 @@
       color: #94a3b8;
     }
 
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
       z-index: 2000;
       left: 0;
       top: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.75);
       justify-content: center;
       align-items: center;
@@ -120,7 +113,6 @@
       cursor: pointer;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       nav ul {
         flex-direction: column;
@@ -147,71 +139,60 @@
 </head>
 
 <body>
+  <nav>
+    <div class="logo">VoltSphere</div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <ul id="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-  <!-- Header -->
-  <header>
-    <nav>
-      <div class="logo">VoltSphere</div>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-      <ul id="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Home Section -->
   <section id="home">
     <h1>Welcome to VoltSphere</h1>
     <p>Empowering the future with microgrid simulation solutions.</p>
   </section>
 
-  <!-- Services Section -->
   <section id="services">
     <h2>Our Services</h2>
     <p><strong>Microgrid Simulation Web App:</strong> A lightweight browser-based tool for modeling your own microgrid.</p>
-    <button class="service-button" onclick="window.location.href='https://microgridsim.voltsphere.com'">Launch Web App</button>
+    <button class="button" onclick="window.location.href='https://microgridsim.voltsphere.com'">Launch Web App</button>
 
     <p style="margin-top: 2rem;"><strong>MicrogridSim Pro API:</strong> Enterprise-level API for businesses to integrate simulations.</p>
-    <button class="service-button" onclick="openModal()">Learn More</button>
+    <button class="button" onclick="openModal()">Learn More</button>
   </section>
 
-  <!-- About Section -->
   <section id="about">
     <h2>About VoltSphere</h2>
     <p>VoltSphere is a student-led innovation venture delivering intuitive tools for sustainable energy planning. Built for users ranging from curious individuals to forward-thinking companies.</p>
   </section>
 
-  <!-- Contact Section -->
   <section id="contact">
     <h2>Contact Us</h2>
     <p>Got questions or want to collaborate? Email us at <a href="mailto:contact@voltsphere.com">contact@voltsphere.com</a>.</p>
   </section>
 
-  <!-- Footer -->
   <footer>
     <p>&copy; 2025 VoltSphere. All rights reserved.</p>
   </footer>
 
-  <!-- Modal -->
   <div class="modal" id="proModal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal()">&times;</span>
       <h2>MicrogridSim Pro API</h2>
       <p>Our Pro API allows businesses to run accurate energy simulations at scale. Designed with flexibility, performance, and integration in mind.</p>
       <ul>
-        <li>• Real-time performance modeling</li>
-        <li>• RESTful endpoints for custom apps</li>
-        <li>• Detailed power flow analysis</li>
-        <li>• Priority email support</li>
+        <li>Real-time performance modeling</li>
+        <li>RESTful endpoints for custom apps</li>
+        <li>Detailed power flow analysis</li>
+        <li>Priority email support</li>
       </ul>
       <p>Contact us at <a href="mailto:enterprise@voltsphere.com">enterprise@voltsphere.com</a> for documentation access.</p>
     </div>
   </div>
 
-  <!-- JavaScript -->
   <script>
     function openModal() {
       document.getElementById("proModal").style.display = "flex";
@@ -226,7 +207,6 @@
       navLinks.classList.toggle("show");
     }
 
-    // Close modal on outside click
     window.addEventListener("click", function (e) {
       const modal = document.getElementById("proModal");
       if (e.target === modal) {
@@ -234,6 +214,5 @@
       }
     });
   </script>
-
 </body>
 </html>
