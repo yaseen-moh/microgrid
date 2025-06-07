@@ -288,6 +288,119 @@
             color: white;
         }
 
+        /* Toggle Switch Styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-left: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border: none;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
         /* Newsletter Section */
         .newsletter {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -395,15 +508,52 @@
                 opacity: 1;
             }
         }
+
+        /* Alert styles */
+        .alert {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
     </style>
 </head>
 <body class="page-transition">
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #333;">Login Required</h2>
+            <p style="margin-bottom: 1.5rem; color: #666;">You've reached your free simulation limit. Please enter your email to continue.</p>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" name="email" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Continue</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <nav class="nav container">
             <a href="#" class="logo">VoltSphere</a>
             <ul class="nav-links">
                 <li><a href="#" class="active">Home</a></li>
+                <li><a href="javascript:void(0)" onclick="navigateToSimulation()">Simulation</a></li>
                 <li><a href="javascript:void(0)" onclick="navigateToServices()">Services</a></li>
                 <li><a href="javascript:void(0)" onclick="navigateToAbout()">About</a></li>
                 <li><a href="javascript:void(0)" onclick="navigateToContact()">Contact</a></li>
@@ -440,136 +590,12 @@
                     <div class="service-icon"></div>
                     <h3><a href="javascript:void(0)" onclick="navigateToServices()">Microgrid Simulation Platform</a></h3>
                     <p>A free-to-try, interactive web app that lets users simulate solar, battery, and grid energy systems in real time. Perfect for students, homeowners, and educators looking to explore smart energy through a visual, hands-on experience.</p>
+                    <a href="javascript:void(0)" onclick="navigateToSimulation()" class="btn">Try Simulation</a>
                 </div>
                 <div class="service-card">
                     <div class="service-icon"></div>
                     <h3><a href="javascript:void(0)" onclick="navigateToServices()">MicrogridSim Pro API</a></h3>
                     <p>A powerful backend service that enables companies to run custom microgrid simulations at scale, with detailed analytics and exportable data. Ideal for renewable energy startups, consultants, and hardware manufacturers integrating smarter energy planning into their solutions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Free Demo Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title">Try Our Free Demo</h2>
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">Experience the power of microgrid simulation with our interactive demo. Adjust settings and see how solar, battery, and grid systems work together over a 24-hour period.</p>
-            </div>
-            
-            <!-- Demo Container -->
-            <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 2rem; max-width: 900px; margin: 0 auto;">
-                
-                <!-- Control Panel -->
-                <div style="background: #f8f9ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
-                    <h3 style="margin-bottom: 1rem; color: #333;">⚙️ Simulation Settings</h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Battery Capacity (kWh): <span id="batteryValue">10</span></label>
-                            <input type="range" id="batteryCapacity" min="0" max="20" value="10" style="width: 100%;" oninput="updateSimulation()">
-                        </div>
-                        
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Battery Efficiency (%): <span id="efficiencyValue">90</span></label>
-                            <input type="range" id="batteryEfficiency" min="70" max="100" value="90" style="width: 100%;" oninput="updateSimulation()">
-                        </div>
-                        
-                        <div>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
-                                <input type="checkbox" id="solarEnabled" checked onchange="updateSimulation()">
-                                ☀️ Enable Solar Power
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <button onclick="updateSimulation()" class="btn" style="margin-top: 1rem; display: inline-block;">Run Simulation</button>
-                </div>
-
-                <!-- Chart Container -->
-                <div style="position: relative;">
-                    <canvas id="microgridChart" width="800" height="400" style="max-width: 100%; height: auto;"></canvas>
-                </div>
-                
-                <!-- Results -->
-                <div id="simulationResults" style="margin-top: 1.5rem; padding: 1rem; background: #e8f5e8; border-radius: 8px;">
-                    <p style="margin: 0; color: #2d5016; font-weight: 500;">✅ Simulation complete! Adjust the settings above to see how different configurations affect your microgrid performance.</p>
-                </div>
-                
-                <!-- Code Display -->
-                <div style="margin-top: 2rem;">
-                    <details style="cursor: pointer;">
-                        <summary style="font-weight: 500; color: #667eea; padding: 0.5rem; background: #f0f2ff; border-radius: 5px;">
-                            📝 View Python Code (Streamlit Version)
-                        </summary>
-                        <pre style="background: #f8f8f8; padding: 1rem; border-radius: 5px; overflow-x: auto; margin-top: 1rem; font-size: 0.9rem;"><code>import streamlit as st
-import matplotlib.pyplot as plt
-import numpy as np
-
-st.set_page_config(page_title="Microgrid Simulator", layout="centered")
-st.title("🔋 Microgrid Simulation Tool")
-st.write("Simulates a 24-hour microgrid with solar generation, battery storage, and home energy usage.")
-
-# --- Sidebar options ---
-st.sidebar.header("⚙️ Simulation Settings")
-battery_capacity = st.sidebar.slider("Battery Capacity (kWh)", 0, 20, 10)
-battery_efficiency = st.sidebar.slider("Battery Efficiency (%)", 70, 100, 90) / 100
-use_solar = st.sidebar.checkbox("☀️ Enable Solar Power", value=True)
-
-# --- Generate profiles ---
-hours = np.arange(24)
-if use_solar:
-    solar_profile = np.array([0]*6 + [2, 3, 4, 5, 5, 5, 4, 3, 2] + [0]*5)
-else:
-    solar_profile = np.zeros(24)
-
-load_profile = np.array([2]*6 + [3]*4 + [4]*6 + [3]*4 + [2]*4)
-battery_level = 0
-battery_storage = []
-grid_usage = []
-
-# --- Simulation logic ---
-for hour in range(24):
-    solar = solar_profile[hour]
-    load = load_profile[hour]
-    net_energy = solar - load
-    
-    if net_energy >= 0:
-        # Surplus: charge battery
-        charge_amount = net_energy * battery_efficiency
-        battery_level = min(battery_level + charge_amount, battery_capacity)
-        grid = 0
-    else:
-        # Deficit: use battery first
-        required = -net_energy
-        if battery_level >= required:
-            battery_level -= required / battery_efficiency
-            grid = 0
-        else:
-            grid = required - battery_level
-            battery_level = 0
-    
-    battery_storage.append(battery_level)
-    grid_usage.append(grid)
-
-# --- Plotting ---
-fig, ax = plt.subplots(figsize=(10, 5))
-if use_solar:
-    ax.plot(hours, solar_profile, label="☀️ Solar Generation (kW)", color="gold")
-ax.plot(hours, load_profile, label="🏠 Load Demand (kW)", color="blue")
-ax.plot(hours, battery_storage, label="🔋 Battery Level (kWh)", color="green")
-ax.plot(hours, grid_usage, label="⚡ Grid Usage (kW)", color="red")
-
-ax.set_xlabel("Hour of Day")
-ax.set_ylabel("Energy / Power")
-ax.set_title("Microgrid Simulation Over 24 Hours")
-ax.legend()
-ax.grid(True)
-
-st.pyplot(fig)
-st.success("✅ Simulation complete!")</code></pre>
-                    </details>
                 </div>
             </div>
         </div>
@@ -596,14 +622,84 @@ st.success("✅ Simulation complete!")</code></pre>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
+        // Global variables for user session management
+        let currentUser = null;
+        let usageData = {};
         let microgridChart = null;
 
-        // Initialize chart when page loads
+        // Load usage data from memory on page load
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(updateSimulation, 500);
+            loadUsageData();
         });
 
+        function loadUsageData() {
+            // In a real application, this would load from a database
+            // For demo purposes, we'll use a simple object to track usage
+            if (!window.voltSphereUsage) {
+                window.voltSphereUsage = {};
+            }
+            usageData = window.voltSphereUsage;
+        }
+
+        function saveUsageData() {
+            // In a real application, this would save to a database
+            window.voltSphereUsage = usageData;
+        }
+
+        function checkSimulationAccess() {
+            if (!currentUser) {
+                // Check if user has exceeded free limit
+                const guestUsage = usageData['guest'] || 0;
+                if (guestUsage >= 3) {
+                    showLoginModal();
+                    return false;
+                }
+                // Increment guest usage
+                usageData['guest'] = guestUsage + 1;
+                saveUsageData();
+                return true;
+            } else {
+                // Logged in users get unlimited access
+                return true;
+            }
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('userEmail').value;
+            
+            if (email) {
+                currentUser = email;
+                // Initialize user data if not exists
+                if (!usageData[email]) {
+                    usageData[email] = 0;
+                }
+                saveUsageData();
+                closeLoginModal();
+                
+                // Show success message
+                alert('Welcome! You now have unlimited access to the simulation.');
+                
+                // If we're on simulation page, enable it
+                if (document.getElementById('microgridChart')) {
+                    updateSimulation();
+                }
+            }
+        }
+
         function updateSimulation() {
+            if (!checkSimulationAccess()) {
+                return;
+            }
+
             // Get input values
             const batteryCapacity = parseFloat(document.getElementById('batteryCapacity').value);
             const batteryEfficiency = parseFloat(document.getElementById('batteryEfficiency').value) / 100;
@@ -651,6 +747,24 @@ st.success("✅ Simulation complete!")</code></pre>
 
             // Update chart
             updateChart(hours, solarProfile, loadProfile, batteryStorage, gridUsage, solarEnabled);
+            
+            // Show usage alert for guest users
+            if (!currentUser) {
+                const remainingUses = 3 - (usageData['guest'] || 0);
+                if (remainingUses > 0) {
+                    document.getElementById('simulationResults').innerHTML = `
+                        <p style="margin: 0; color: #2d5016; font-weight: 500;">
+                            ✅ Simulation complete! You have ${remainingUses} free simulation${remainingUses > 1 ? 's' : ''} remaining.
+                        </p>
+                    `;
+                }
+            } else {
+                document.getElementById('simulationResults').innerHTML = `
+                    <p style="margin: 0; color: #2d5016; font-weight: 500;">
+                        ✅ Simulation complete! Welcome back, ${currentUser}!
+                    </p>
+                `;
+            }
         }
 
         function updateChart(hours, solar, load, battery, grid, showSolar) {
@@ -735,7 +849,22 @@ st.success("✅ Simulation complete!")</code></pre>
                 }
             });
         }
-        // Smooth page transitions
+
+        // Navigation functions
+        function navigateToSimulation() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.innerHTML = getSimulationPageHTML();
+                document.body.style.opacity = '1';
+                document.title = 'VoltSphere - Simulation';
+                setTimeout(() => {
+                    if (checkSimulationAccess()) {
+                        updateSimulation();
+                    }
+                }, 500);
+            }, 300);
+        }
+
         function navigateToServices() {
             document.body.style.opacity = '0';
             setTimeout(() => {
@@ -777,15 +906,107 @@ st.success("✅ Simulation complete!")</code></pre>
             event.target.reset();
         }
 
-        // Services Page HTML
-        function getServicesPageHTML() {
+        // Simulation Page HTML
+        function getSimulationPageHTML() {
             return `
             <div class="page-transition">
+                <!-- Login Modal -->
+                <div id="loginModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeLoginModal()">&times;</span>
+                        <h2 style="margin-bottom: 1rem; color: #333;">Login Required</h2>
+                        <p style="margin-bottom: 1.5rem; color: #666;">You've reached your free simulation limit (3 uses). Please enter your email to continue with unlimited access.</p>
+                        <form id="loginForm" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label for="userEmail">Email:</label>
+                                <input type="email" id="userEmail" name="email" required>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Continue</button>
+                        </form>
+                    </div>
+                    
+                <!-- Header -->
                 <header class="header">
                     <nav class="nav container">
                         <a href="javascript:void(0)" onclick="navigateToHome()" class="logo">VoltSphere</a>
                         <ul class="nav-links">
                             <li><a href="javascript:void(0)" onclick="navigateToHome()">Home</a></li>
+                            <li><a href="#" class="active">Simulation</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToServices()">Services</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToAbout()">About</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToContact()">Contact</a></li>
+                        </ul>
+                    </nav>
+                </header>
+
+                <!-- Simulation Section -->
+                <section class="section" style="margin-top: 80px;">
+                    <div class="container">
+                        <h2 class="section-title">Microgrid Simulation</h2>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; margin-bottom: 2rem;">
+                            <!-- Controls -->
+                            <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 1.5rem; color: #333;">Simulation Controls</h3>
+                                
+                                <div class="form-group">
+                                    <label for="batteryCapacity">Battery Capacity (kWh): <span id="batteryValue">10</span></label>
+                                    <input type="range" id="batteryCapacity" min="5" max="50" value="10" step="1" 
+                                           style="width: 100%; margin-top: 0.5rem;" onchange="updateSimulation()">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="batteryEfficiency">Battery Efficiency (%): <span id="efficiencyValue">85</span></label>
+                                    <input type="range" id="batteryEfficiency" min="70" max="95" value="85" step="1" 
+                                           style="width: 100%; margin-top: 0.5rem;" onchange="updateSimulation()">
+                                </div>
+                                
+                                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: #f8f9ff; border-radius: 10px; border: 2px solid #667eea;">
+                                    <label for="solarEnabled" style="margin: 0; font-weight: 600; color: #333;">☀️ Solar Panels</label>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="solarEnabled" checked onchange="updateSimulation()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <button onclick="updateSimulation()" class="btn" style="width: 100%; margin-top: 1rem;">
+                                    🔄 Reset Simulation
+                                </button>
+                            </div>
+                            
+                            <!-- Chart -->
+                            <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                <canvas id="microgridChart" style="height: 400px;"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div id="simulationResults" style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1rem; border-radius: 10px; text-align: center;">
+                            Click "Reset Simulation" to begin your energy analysis!
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Footer -->
+                <footer class="footer">
+                    <div class="container">
+                        <p>&copy; 2024 VoltSphere. All rights reserved.</p>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // Services Page HTML
+        function getServicesPageHTML() {
+            return `
+            <div class="page-transition">
+                <!-- Header -->
+                <header class="header">
+                    <nav class="nav container">
+                        <a href="javascript:void(0)" onclick="navigateToHome()" class="logo">VoltSphere</a>
+                        <ul class="nav-links">
+                            <li><a href="javascript:void(0)" onclick="navigateToHome()">Home</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToSimulation()">Simulation</a></li>
                             <li><a href="#" class="active">Services</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToAbout()">About</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToContact()">Contact</a></li>
@@ -793,90 +1014,59 @@ st.success("✅ Simulation complete!")</code></pre>
                     </nav>
                 </header>
 
-                <section class="hero" style="height: 60vh;">
-                    <div class="hero-content">
-                        <h1>Our Services</h1>
-                        <p>Welcome to the future of smart energy, where innovation meets accessibility</p>
-                    </div>
-                </section>
-
-                <section class="section">
+                <!-- Services Section -->
+                <section class="section" style="margin-top: 80px;">
                     <div class="container">
-                        <h2 class="section-title">MicrogridSim Web – For Individuals</h2>
+                        <h2 class="section-title">Our Services</h2>
+                        
                         <div class="services-grid">
                             <div class="service-card">
-                                <h3>Free Tier</h3>
-                                <ul style="list-style: none; padding: 0;">
-                                    <li>• Limited to 3 simulations/day</li>
-                                    <li>• Basic solar/load profiles</li>
-                                    <li>• No export or saved projects</li>
+                                <div class="service-icon" style="background-image: url('https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+                                <h3>Microgrid Simulation Platform</h3>
+                                <p>A free-to-try, interactive web app that lets users simulate solar, battery, and grid energy systems in real time. Perfect for students, homeowners, and educators looking to explore smart energy through a visual, hands-on experience.</p>
+                                <p><strong>Features:</strong></p>
+                                <ul style="text-align: left; margin: 1rem 0; color: #666;">
+                                    <li>Real-time energy flow visualization</li>
+                                    <li>Customizable battery and solar configurations</li>
+                                    <li>24-hour simulation profiles</li>
+                                    <li>Interactive charts and analytics</li>
                                 </ul>
+                                <a href="javascript:void(0)" onclick="navigateToSimulation()" class="btn">Try Simulation</a>
                             </div>
+                            
                             <div class="service-card">
-                                <h3>Pro Tier – $5/month</h3>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
-                                    <li>• Unlimited simulations</li>
-                                    <li>• Export data (CSV/PNG)</li>
-                                    <li>• Save and revisit projects</li>
-                                    <li>• Priority support & early features</li>
+                                <div class="service-icon" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+                                <h3>MicrogridSim Pro API</h3>
+                                <p>A powerful backend service that enables companies to run custom microgrid simulations at scale, with detailed analytics and exportable data. Ideal for renewable energy startups, consultants, and hardware manufacturers.</p>
+                                <p><strong>Features:</strong></p>
+                                <ul style="text-align: left; margin: 1rem 0; color: #666;">
+                                    <li>High-volume API access</li>
+                                    <li>Custom simulation parameters</li>
+                                    <li>Detailed analytics and reporting</li>
+                                    <li>Data export capabilities</li>
+                                    <li>Enterprise support</li>
                                 </ul>
-                                <p><em>Ideal for students, DIYers, and small teams</em></p>
-                                <a href="#" class="btn">Buy Now</a>
+                                <a href="javascript:void(0)" onclick="navigateToContact()" class="btn">Contact Sales</a>
+                            </div>
+                            
+                            <div class="service-card">
+                                <div class="service-icon" style="background-image: url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+                                <h3>Energy Consulting</h3>
+                                <p>Expert consultation services for renewable energy projects, microgrid design, and energy optimization strategies. Our team helps you make informed decisions about your energy future.</p>
+                                <p><strong>Services Include:</strong></p>
+                                <ul style="text-align: left; margin: 1rem 0; color: #666;">
+                                    <li>Feasibility studies</li>
+                                    <li>System design and optimization</li>
+                                    <li>ROI analysis</li>
+                                    <li>Regulatory compliance</li>
+                                </ul>
+                                <a href="javascript:void(0)" onclick="navigateToContact()" class="btn">Get Quote</a>
                             </div>
                         </div>
                     </div>
                 </section>
-
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title">MicrogridSim Pro API – For Businesses</h2>
-                        <div class="services-grid">
-                            <div class="service-card">
-                                <h3>Starter – $29/month</h3>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
-                                    <li>• Up to 5,000 API calls/month</li>
-                                    <li>• Standard solar/load modeling</li>
-                                    <li>• Basic documentation</li>
-                                </ul>
-                                <p><em>Ideal for small energy startups and school research teams</em></p>
-                            </div>
-                            <div class="service-card">
-                                <h3>Growth – $99/month</h3>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
-                                    <li>• Up to 50,000 API calls/month</li>
-                                    <li>• Advanced customization</li>
-                                    <li>• Data export (CSV, JSON)</li>
-                                    <li>• Priority email support</li>
-                                </ul>
-                            </div>
-                            <div class="service-card">
-                                <h3>Enterprise – Custom Pricing</h3>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
-                                    <li>• Unlimited API usage</li>
-                                    <li>• Dedicated engineering support</li>
-                                    <li>• White-label features</li>
-                                    <li>• Integration consulting</li>
-                                </ul>
-                                <a href="javascript:void(0)" onclick="navigateToContact()" class="btn">Contact Us</a>
-                            </div>
-                        </div>
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <a href="#" class="btn">Buy Now</a>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="newsletter">
-                    <div class="container">
-                        <h3>VoltSphere News</h3>
-                        <p>Sign up with your email address to receive news and updates.</p>
-                        <form class="newsletter-form" onsubmit="handleNewsletterSignup(event)">
-                            <input type="email" placeholder="Email Address" required>
-                            <button type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                </section>
-
+                
+                <!-- Footer -->
                 <footer class="footer">
                     <div class="container">
                         <p>&copy; 2024 VoltSphere. All rights reserved.</p>
@@ -890,11 +1080,13 @@ st.success("✅ Simulation complete!")</code></pre>
         function getAboutPageHTML() {
             return `
             <div class="page-transition">
+                <!-- Header -->
                 <header class="header">
                     <nav class="nav container">
                         <a href="javascript:void(0)" onclick="navigateToHome()" class="logo">VoltSphere</a>
                         <ul class="nav-links">
                             <li><a href="javascript:void(0)" onclick="navigateToHome()">Home</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToSimulation()">Simulation</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToServices()">Services</a></li>
                             <li><a href="#" class="active">About</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToContact()">Contact</a></li>
@@ -902,54 +1094,49 @@ st.success("✅ Simulation complete!")</code></pre>
                     </nav>
                 </header>
 
-                <section class="hero" style="height: 60vh;">
-                    <div class="hero-content">
-                        <h1>Who We Are</h1>
-                        <p>Next-generation energy startup on a mission</p>
-                    </div>
-                </section>
-
-                <section class="section">
+                <!-- About Section -->
+                <section class="section" style="margin-top: 80px;">
                     <div class="container">
-                        <div class="brand-vision">
-                            <p>We're a next-generation energy startup on a mission to make microgrid technology accessible to everyone — from curious students to cutting-edge companies. By combining powerful simulation tools with intuitive design, we empower users to explore, model, and optimize renewable energy systems that drive a smarter, more sustainable future.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title">Contact Us</h2>
-                        <div style="max-width: 600px; margin: 0 auto;">
-                            <p style="text-align: center; margin-bottom: 2rem;">Interested in working together? Fill out some info and we will be in touch shortly. We can't wait to hear from you!</p>
-                            <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="handleContactForm(event)">
-                                <div style="display: flex; gap: 1rem;">
-                                    <input type="text" placeholder="First Name" required style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
-                                    <input type="text" placeholder="Last Name" required style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
+                        <h2 class="section-title">About VoltSphere</h2>
+                        
+                        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                            <div style="background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 3rem;">
+                                <h3 style="color: #333; margin-bottom: 1.5rem; font-size: 1.8rem;">Our Mission</h3>
+                                <p style="font-size: 1.1rem; line-height: 1.8; color: #666; margin-bottom: 2rem;">
+                                    VoltSphere is at the forefront of smart energy innovation, building the tools that empower communities to take control of their energy future. By combining intelligent engineering with real-time simulation, we make advanced renewable energy solutions accessible, transparent, and impactful.
+                                </p>
+                                <p style="font-size: 1.1rem; line-height: 1.8; color: #666;">
+                                    Our mission is to accelerate the global shift to cleaner, smarter, and more sustainable power — one home, one grid, one user at a time.
+                                </p>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                                <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                    <h4 style="color: #667eea; margin-bottom: 1rem; font-size: 1.3rem;">🌱 Sustainability</h4>
+                                    <p style="color: #666; line-height: 1.6;">
+                                        We believe in a future powered by clean, renewable energy that benefits both people and the planet.
+                                    </p>
                                 </div>
-                                <input type="email" placeholder="Email" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
-                                <label style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <input type="checkbox" name="newsletter">
-                                    <span>Sign up for news and updates</span>
-                                </label>
-                                <textarea placeholder="Message" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; min-height: 120px; resize: vertical;"></textarea>
-                                <button type="submit" class="btn">Submit</button>
-                            </form>
+                                
+                                <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                    <h4 style="color: #667eea; margin-bottom: 1rem; font-size: 1.3rem;">🚀 Innovation</h4>
+                                    <p style="color: #666; line-height: 1.6;">
+                                        We leverage cutting-edge technology to make complex energy systems simple and accessible to everyone.
+                                    </p>
+                                </div>
+                                
+                                <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                    <h4 style="color: #667eea; margin-bottom: 1rem; font-size: 1.3rem;">🤝 Community</h4>
+                                    <p style="color: #666; line-height: 1.6;">
+                                        We empower communities to make informed decisions about their energy future through education and simulation.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
-
-                <section class="newsletter">
-                    <div class="container">
-                        <h3>VoltSphere News</h3>
-                        <p>Sign up with your email address to receive news and updates.</p>
-                        <form class="newsletter-form" onsubmit="handleNewsletterSignup(event)">
-                            <input type="email" placeholder="Email Address" required>
-                            <button type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                </section>
-
+                
+                <!-- Footer -->
                 <footer class="footer">
                     <div class="container">
                         <p>&copy; 2024 VoltSphere. All rights reserved.</p>
@@ -963,11 +1150,13 @@ st.success("✅ Simulation complete!")</code></pre>
         function getContactPageHTML() {
             return `
             <div class="page-transition">
+                <!-- Header -->
                 <header class="header">
                     <nav class="nav container">
                         <a href="javascript:void(0)" onclick="navigateToHome()" class="logo">VoltSphere</a>
                         <ul class="nav-links">
                             <li><a href="javascript:void(0)" onclick="navigateToHome()">Home</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToSimulation()">Simulation</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToServices()">Services</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToAbout()">About</a></li>
                             <li><a href="#" class="active">Contact</a></li>
@@ -975,46 +1164,75 @@ st.success("✅ Simulation complete!")</code></pre>
                     </nav>
                 </header>
 
-                <section class="hero" style="height: 60vh;">
-                    <div class="hero-content">
-                        <h1>Contact Us</h1>
-                        <p>If you have any questions or concerns, please feel free to contact us here</p>
-                    </div>
-                </section>
-
-                <section class="section">
+                <!-- Contact Section -->
+                <section class="section" style="margin-top: 80px;">
                     <div class="container">
-                        <div style="text-align: center; margin-bottom: 3rem;">
-                            <p style="margin-bottom: 1rem;">Response time can vary from 1-2 business days.</p>
-                            <p style="margin-bottom: 0.5rem;"><strong>Email:</strong> voltsphere.sim@gmail.com</p>
-                            <p><strong>Phone:</strong> (630)-780-0523</p>
-                        </div>
+                        <h2 class="section-title">Contact Us</h2>
                         
-                        <div style="max-width: 600px; margin: 0 auto;">
-                            <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="handleContactForm(event)">
-                                <div style="display: flex; gap: 1rem;">
-                                    <input type="text" placeholder="First Name" required style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
-                                    <input type="text" placeholder="Last Name" required style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto;">
+                            <!-- Contact Form -->
+                            <div style="background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 1.5rem; color: #333;">Get In Touch</h3>
+                                <form onsubmit="handleContactForm(event)">
+                                    <div class="form-group">
+                                        <label for="contactName">Name:</label>
+                                        <input type="text" id="contactName" name="name" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactEmail">Email:</label>
+                                        <input type="email" id="contactEmail" name="email" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactSubject">Subject:</label>
+                                        <select id="contactSubject" name="subject" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
+                                            <option value="">Select a topic</option>
+                                            <option value="simulation">Simulation Support</option>
+                                            <option value="api">API Inquiry</option>
+                                            <option value="consulting">Consulting Services</option>
+                                            <option value="general">General Question</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactMessage">Message:</label>
+                                        <textarea id="contactMessage" name="message" rows="5" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                                </form>
+                            </div>
+                            
+                            <!-- Contact Info -->
+                            <div>
+                                <div style="background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                                    <h3 style="margin-bottom: 1.5rem; color: #333;">Contact Information</h3>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: #667eea;">📧 Email:</strong><br>
+                                        <span style="color: #666;">info@voltsphere.com</span>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: #667eea;">📞 Phone:</strong><br>
+                                        <span style="color: #666;">+1 (555) 123-VOLT</span>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: #667eea;">🏢 Office:</strong><br>
+                                        <span style="color: #666;">123 Energy Lane<br>Innovation City, IC 12345</span>
+                                    </div>
                                 </div>
-                                <input type="email" placeholder="Email" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
-                                <textarea placeholder="Message" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; min-height: 120px; resize: vertical;"></textarea>
-                                <button type="submit" class="btn">SEND</button>
-                            </form>
+                                
+                                <div style="background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                    <h3 style="margin-bottom: 1.5rem; color: #333;">Support Hours</h3>
+                                    <div style="color: #666; line-height: 1.6;">
+                                        <strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM EST<br>
+                                        <strong>Saturday:</strong> 10:00 AM - 4:00 PM EST<br>
+                                        <strong>Sunday:</strong> Closed<br><br>
+                                        <em>Emergency API support available 24/7 for Pro subscribers.</em>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
-
-                <section class="newsletter">
-                    <div class="container">
-                        <h3>VoltSphere News</h3>
-                        <p>Sign up with your email address to receive news and updates.</p>
-                        <form class="newsletter-form" onsubmit="handleNewsletterSignup(event)">
-                            <input type="email" placeholder="Email Address" required>
-                            <button type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                </section>
-
+                
+                <!-- Footer -->
                 <footer class="footer">
                     <div class="container">
                         <p>&copy; 2024 VoltSphere. All rights reserved.</p>
@@ -1024,17 +1242,18 @@ st.success("✅ Simulation complete!")</code></pre>
             `;
         }
 
+        // Contact form handler
         function handleContactForm(event) {
             event.preventDefault();
-            alert('Thank you for your message! We\'ll get back to you within 1-2 business days.');
+            const formData = new FormData(event.target);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            alert(`Thank you, ${name}! Your message has been sent. We'll respond to ${email} within 24 hours.`);
             event.target.reset();
         }
-
-        // Smooth scrolling and page load animations
-        window.addEventListener('load', function() {
-            document.body.style.opacity = '1';
-        });
     </script>
 </body>
-</html>`;
-        }
+</html>
